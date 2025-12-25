@@ -35,7 +35,8 @@ check_port() {
 # Установка зависимостей
 install_deps() {
     echo -e "${GREEN}Проверка и установка зависимостей...${NC}"
-    apt update -y
+    apt-get update -y
+    apt-get install -y wireguard wireguard-tools iptables
 
     if ! command -v docker &> /dev/null; then
         echo -e "${YELLOW}Docker не установлен, устанавливаем с помощью официального скрипта...${NC}"
@@ -58,7 +59,7 @@ install_deps() {
         # Если по какой-то причине не работает, устанавливаем вручную
         if ! docker compose version &> /dev/null; then
             echo -e "${YELLOW}Установка плагина docker-compose-plugin...${NC}"
-            apt install -y docker-compose-plugin
+            apt-get install -y docker-compose-plugin
             if [ $? -ne 0 ]; then
                 echo -e "${RED}Ошибка при установке docker-compose-plugin${NC}"
                 exit 1
@@ -72,21 +73,21 @@ install_deps() {
     # Проверка остальных зависимостей (оставляем без изменений)
     if ! command -v qrencode &> /dev/null; then
         echo "qrencode не установлен, устанавливаем..."
-        apt install -y qrencode
+        apt-get install -y qrencode
     else
         echo "qrencode уже установлен"
     fi
 
     if ! command -v htpasswd &> /dev/null; then
         echo "htpasswd не установлен, устанавливаем apache2-utils..."
-        apt install -y apache2-utils
+        apt-get install -y apache2-utils
     else
         echo "htpasswd уже установлен"
     fi
 
     if ! command -v ss &> /dev/null; then
         echo "net-tools не установлен, устанавливаем..."
-        apt install -y net-tools
+        apt-get install -y net-tools
     else
         echo "net-tools уже установлен"
     fi
